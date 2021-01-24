@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="./images/favicon-32x32.png"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+      integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+      crossorigin=""
+    />
+    <script
+      src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+      integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+      crossorigin=""
+    ></script>
+    <title>Frontend Mentor | IP Address Tracker</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="wrapper__top">
+        <div class="overlay">
+          <h1>IP Address Tracker</h1>
+
+          <form method="POST" class="form">
+            <input
+              class="form__input"
+              type="text"
+              name="search-input"
+              id="search-input"
+              placeholder=" Search for any IP address or domain"
+            />
+            <button class="btn__submit" type="submit">
+              <img src="images/icon-arrow.svg" alt="right arrow" />
+            </button>
+          </form>
+
+          <div class="box box--white">
+            <div>
+              <h4>IP Address</h4>
+              <p id="ip-address"></p>
+            </div>
+
+            <div>
+              <h4 class="box__title">Location</h4>
+              <p id="location"></p>
+            </div>
+
+            <div>
+              <h4>Timezone</h4>
+              <p id="timezone"></p>
+            </div>
+
+            <div>
+              <h4>ISP</h4>
+              <p id="isp"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mymap" id="mapid"></div>
+
+      <div class="attribution">
+        Challenge by<a
+          href="https://www.frontendmentor.io?ref=challenge"
+          target="_blank"
+          >Frontend Mentor</a
+        >. Coded by<a href="#">Marta</a>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        let apiKey = "at_XZkXC1c6HE26HC8KWwp8BRhtPxBzA";
+        let form = document.querySelector(".form");
+
+        let ipAddress = document.getElementById("ip-address");
+        let location = document.getElementById("location");
+        let timezone = document.getElementById("timezone");
+        let isp = document.getElementById("isp");
+
+        var myIcon = L.icon({
+          iconUrl: "images/icon-location.svg",
+          iconSize: [46, 56],
+          iconAnchor: [23, 56],
+          popupAnchor: [-3, -76],
+        });
+
+        var mymap = L.map("mapid").setView([51.505, -0.09], 13);
+        var mapToken =
+          "pk.eyJ1IjoibW9yc2FrYTkiLCJhIjoiY2trOXZmYjE0MGd0cDJzcGJueHd1MTZidCJ9.UJ5RlDnugIUNkhqsHEf3fw";
+        L.tileLayer(
+          `https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=${mapToken}`,
+          {
+            attribution:
+              'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+            maxZoom: 18,
+            id: "mapbox/streets-v11",
+            tileSize: 512,
+            zoomOffset: -1,
+            accessToken: "your.mapbox.access.token",
+          }
+        ).addTo(mymap);
+
+        async function formSubmit(form) {
+          let input = form["search-input"].value;
+          let response = await $.get(
+            `https://geo.ipify.org/api/v1?apiKey=${apiKey}&hostname=${input}`
+          );
+          console.log(response);
+          ipAddress.innerText = response.ip;
+          location.innerText = `${response.location.city}, ${response.location.country} ${response.location.postalCode}`;
+          timezone.innerText = `UTC ${response.location.timezone}`;
+          isp.innerText = response.isp;
+          mymap.setView([response.location.lat, response.location.lng], 13);
+          L.marker([response.location.lat, response.location.lng], {
+            icon: myIcon,
+          }).addTo(mymap);
+        }
+
+        form.addEventListener("submit", (event) => {
+          event.preventDefault();
+          formSubmit(form);
+        });
+      })();
+    </script>
+  </body>
+</html>

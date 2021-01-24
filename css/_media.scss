@@ -1,0 +1,38 @@
+@media screen and(min-width: 768px) {
+  .wrapper__top {
+    height: 15em;
+
+    .overlay {
+      position: relative;
+      margin: 0 $spacing * 4;
+
+      form {
+        .form__input {
+          width: 50%;
+          border: 0;
+          padding: $spacing;
+          border-radius: 16px 0 0 16px;
+        }
+      }
+
+      .box {
+        display: flex;
+        gap: $spacing;
+
+        & > div {
+          flex: 1;
+          border-right: 1px solid $grey;
+
+          &:last-child {
+            border-right: none;
+          }
+        }
+      }
+    }
+  }
+
+  h4,
+  p {
+    text-align: left;
+  }
+}

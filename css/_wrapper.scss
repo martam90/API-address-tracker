@@ -1,0 +1,65 @@
+.wrapper__top {
+  height: 20em;
+  padding-top: $spacing;
+  background-image: url("../images/pattern-bg.png");
+
+  .overlay {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    margin: 0 $spacing;
+
+    form {
+      display: flex;
+      justify-content: center;
+      padding: $spacing 0;
+
+      .form__input {
+        width: 100%;
+        border: 0;
+        padding: $spacing;
+        border-radius: 16px 0 0 16px;
+
+        &:hover {
+          cursor: pointer;
+        }
+      }
+
+      .btn__submit {
+        border: 0;
+        outline: 0;
+        background-color: $black;
+        padding: $spacing $spacing + 5;
+        border-radius: 0 16px 16px 0;
+        cursor: pointer;
+        transition: all ease-in-out 500ms;
+
+        &:hover {
+          background-color: $very-dark;
+          transition: all ease-in-out 500ms;
+        }
+
+        &:focus {
+          outline: 2px dotted white;
+        }
+      }
+    }
+
+    .box {
+      background-color: rgb(255, 255, 255);
+      padding: $spacing + 10;
+      border-radius: 12px;
+    }
+  }
+}
+
+.mymap {
+  height: 100vh;
+  z-index: -1;
+}
+
+.attribution {
+  display: flex;
+  justify-content: center;
+  font-size: $font-size - 4;
+}
