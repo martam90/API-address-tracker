@@ -49,13 +49,13 @@
       background-color: rgb(255, 255, 255);
       padding: $spacing + 10;
       border-radius: 12px;
+      z-index: 999;
     }
   }
 }
 
 .mymap {
   height: 100vh;
-  z-index: -1;
 }
 
 .attribution {
