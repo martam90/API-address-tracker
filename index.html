@@ -116,11 +116,36 @@
           }
         ).addTo(mymap);
 
+        function isIPAddress(value) {
+            let regIPv4 = /^[0-9]{1,3}(\.[0-9]{1,3}){3}$/;
+            let regIPv6 = /^[0-9a-fA-F:]+$/;
+
+            return regIPv4.test(value) || regIPv6.test(value);
+        }
+
+        async function getInfo(address) {
+          if (isIPAddress(address)) {
+            return await $.get(
+              `https://geo.ipify.org/api/v1?apiKey=${apiKey}&ipAddress=${address}`
+            );
+          } else {
+            return await $.get(
+              `https://geo.ipify.org/api/v1?apiKey=${apiKey}&domain=${address}`
+            );
+          }
+        }
+
         async function formSubmit(form) {
           let input = form["search-input"].value;
-          let response = await $.get(
-            `https://geo.ipify.org/api/v1?apiKey=${apiKey}&hostname=${input}`
-          );
+          let response;
+          try {
+            response = await getInfo(input);
+          } catch (ex) {
+            console.log(ex);
+            alert(ex.responseJSON.messages);
+            return;
+          }
+          
           console.log(response);
           ipAddress.innerText = response.ip;
           location.innerText = `${response.location.city}, ${response.location.country} ${response.location.postalCode}`;
@@ -136,6 +161,10 @@
           event.preventDefault();
           formSubmit(form);
         });
+
+
+        
+
       })();
     </script>
   </body>
